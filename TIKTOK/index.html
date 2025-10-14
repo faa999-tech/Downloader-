@@ -164,16 +164,7 @@
 
         const { video_hd, video_sd, mp3, thumbnail, title } = json.result;
 
-        // Auto-download HD
-        const a = document.createElement('a');
-        a.href = video_hd;
-        a.download = 'tiktok-hd.mp4';
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-
-        // Tampilkan hasil lengkap
+        // Tampilkan hasil tanpa auto-download
         document.getElementById('thumb').src = thumbnail;
         document.getElementById('title').textContent = title;
         document.getElementById('hd').href = video_hd;
@@ -189,4 +180,4 @@
     }
   </script>
 </body>
-  </html>
+</html>
