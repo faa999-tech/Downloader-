@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>TikTok Downloader</title>
+  <style>
+    body {
+      background:#000;
+      color:#fff;
+      text-align:center;
+      font-family:Arial;
+      padding:50px;
+    }
+    input {
+      padding:8px;
+      width:70%;
+      border-radius:10px;
+      border:none;
+    }
+    button {
+      padding:8px 15px;
+      background:red;
+      color:#fff;
+      border:none;
+      border-radius:10px;
+      margin-left:10px;
+      cursor:pointer;
+    }
+    a {
+      display:block;
+      margin-top:30px;
+      color:red;
+    }
+  </style>
+</head>
+<body>
+  <h1>TikTok Downloader</h1>
+  <p>Masukkan link TikTok kamu di bawah ini:</p>
+  <input id="url" placeholder="https://tiktok.com/...">
+  <button onclick="go()">Download</button>
+
+  <script>
+    function go(){
+      const url = document.getElementById('url').value;
+      if(url) alert('Download dari: ' + url);
+      else alert('Masukkan link dulu!');
+    }
+  </script>
+
+  <a href="/">⬅ Kembali ke Halaman Utama</a>
+</body>
+</html>
