@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Download YouTube</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #0a0a0a;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: #111;
+      border-radius: 16px;
+      padding: 30px 25px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
+      text-align: center;
+    }
+
+    h1 {
+      color: #ff0000;
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    input[type="url"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 10px;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      margin-bottom: 20px;
+    }
+
+    input[type="url"]::placeholder {
+      color: #777;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: #ff0000;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: scale(1.03);
+    }
+
+    .loading {
+      display: none;
+      color: #bbb;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Download YouTube</h1>
+    <input id="url" type="url" placeholder="https://www.youtube.com/watch?v=xxxxx">
+    <button class="btn" onclick="dl()">Download</button>
+    <div class="loading" id="loading">⏳ Sedang memproses...</div>
+    <div class="footer">© 2025 Faa Downloader</div>
+  </div>
+
+  <script>
+    async function dl() {
+      const url = document.getElementById('url').value.trim();
+      if (!url) return alert('Masukkan link YouTube!');
+      
+      const loading = document.getElementById('loading');
+      loading.style.display = 'block';
+      document.querySelector('.btn').disabled = true;
+
+      try {
+        const api = `https://api.nvidiabotz.xyz/download/ytmp4?url=${encodeURIComponent(url)}`;
+        const res = await fetch(api);
+        const json = await res.json();
+
+        if (!json.status || !json.result) throw new Error('Gagal mendapatkan link.');
+
+        const a = document.createElement('a');
+        a.href = json.result;
+        a.download = '';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch (e) {
+        alert(e.message || 'Server error');
+      } finally {
+        loading.style.display = 'none';
+        document.querySelector('.btn').disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
