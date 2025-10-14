@@ -5,16 +5,13 @@
   <title>Tools Downloader</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* GLOBAL */
     body, html {
       margin: 0; padding: 0;
       font-family: Arial, sans-serif;
       background: #000;
       color: #fff;
-      /* ❌ overflow:hidden dihapus supaya bisa scroll */
     }
 
-    /* STARFIELD CANVAS */
     #starfield {
       position: fixed;
       top: 0; left: 0;
@@ -23,7 +20,6 @@
       background: #000;
     }
 
-    /* WELCOME PAGE */
     #welcome {
       position: fixed; top: 0; left: 0;
       width: 100%; height: 100%;
@@ -76,7 +72,6 @@
       box-shadow: 0 0 25px #ff3b3b, 0 0 50px #ff3b3b;
     }
 
-    /* LOADING SCREEN */
     #loadingScreen {
       position: fixed; top: 0; left: 0;
       width: 100%; height: 100%;
@@ -115,11 +110,9 @@
       50% { opacity: 0.4; }
     }
 
-    /* MAIN PAGE */
     #main {
       display: none;
       padding: 20px;
-      /* ❌ overflow-y:auto; dan height:100vh dihapus agar scroll penuh */
     }
 
     header { text-align: center; margin-bottom: 20px; }
@@ -147,14 +140,6 @@
     }
 
     @keyframes marquee { 0%{ transform:translateX(0);} 100%{ transform:translateX(-100%);} }
-
-    .search-box { display:flex; justify-content:center; margin:20px 0; }
-    .search-box input {
-      padding:10px; width:60%; max-width:300px;
-      border-radius:20px; border:none;
-      outline:none; text-align:center;
-      box-shadow:0 0 10px red;
-    }
 
     .tools {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -185,7 +170,6 @@
 
 <canvas id="starfield"></canvas>
 
-<!-- WELCOME -->
 <div id="welcome">
   <img src="https://files.catbox.moe/z1l1xi.png" alt="Profile">
   <div class="typing">WELCOME TO TOOLS DOWNLOADER</div>
@@ -194,23 +178,20 @@
   <button id="startBtn" onclick="showLoading()">Start</button>
 </div>
 
-<!-- LOADING -->
 <div id="loadingScreen">
   <div class="loader"></div>
   <div class="loader-text">Loading...</div>
 </div>
 
-<!-- AUDIO -->
 <audio id="bgMusic" loop>
   <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 
-<!-- MAIN -->
 <div id="main">
   <header>
     <img src="https://files.catbox.moe/z1l1xi.png" alt="Profile">
-    <h1>Reseller Gaming Programer</h1>
-    <p>Website ini menyediakan berbagai tools downloader gratis tanpa iklan</p>
+    <h1 id="userTitle">Reseller Gaming Programer</h1>
+    <p id="userDesc">Website ini menyediakan berbagai tools downloader gratis tanpa iklan</p>
   </header>
 
   <div class="marquee">
@@ -241,49 +222,68 @@
 </div>
 
 <script>
-  setTimeout(()=>{ document.getElementById("startBtn").style.display="inline-block"; }, 4500);
+  // tampilkan tombol START setelah typing
+  setTimeout(() => {
+    document.getElementById("startBtn").style.display = "inline-block";
+  }, 4500);
 
   function showLoading() {
-    document.getElementById("welcome").style.display="none";
-    document.getElementById("loadingScreen").style.display="flex";
-    setTimeout(()=>{
-      document.getElementById("loadingScreen").style.display="none";
-      document.getElementById("main").style.display="block";
+    document.getElementById("welcome").style.display = "none";
+    document.getElementById("loadingScreen").style.display = "flex";
+    setTimeout(() => {
+      document.getElementById("loadingScreen").style.display = "none";
+      document.getElementById("main").style.display = "block";
       document.getElementById("bgMusic").play();
-    },3000);
+      updateContentFromQuery();
+    }, 3000);
+  }
+
+  // baca query dari URL dan tampilkan
+  function updateContentFromQuery() {
+    const params = new URLSearchParams(window.location.search);
+    const nama = params.get("nama");
+    const tool = params.get("tool");
+
+    if (nama || tool) {
+      const title = document.getElementById("userTitle");
+      const desc = document.getElementById("userDesc");
+
+      if (nama) title.textContent = `Selamat Datang, ${nama}!`;
+      if (tool) desc.textContent = `Anda membuka halaman tools: ${tool.toUpperCase()}`;
+    }
   }
 
   // STARFIELD
   const canvas = document.getElementById("starfield");
   const ctx = canvas.getContext("2d");
   let stars = [];
-  let w,h;
-  function resize(){
-    w=canvas.width=window.innerWidth;
-    h=canvas.height=window.innerHeight;
+  let w, h;
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
     stars = [];
-    for(let i=0;i<150;i++){
-      stars.push({x:Math.random()*w,y:Math.random()*h,z:Math.random()*w});
+    for (let i = 0; i < 150; i++) {
+      stars.push({ x: Math.random() * w, y: Math.random() * h, z: Math.random() * w });
     }
   }
-  window.onresize=resize;
+  window.onresize = resize;
   resize();
 
-  function animate(){
-    ctx.fillStyle="#000";
-    ctx.fillRect(0,0,w,h);
-    for(let i=0;i<stars.length;i++){
-      let s=stars[i];
-      s.z-=2;
-      if(s.z<=0){ s.x=Math.random()*w; s.y=Math.random()*h; s.z=w; }
-      let k=128.0/s.z;
-      let px=s.x*k+w/2;
-      let py=s.y*k+h/2;
-      if(px>=0 && px<=w && py>=0 && py<=h){
-        let size=(1-s.z/w)*3;
-        ctx.fillStyle="rgba(255,30,30,1)";
+  function animate() {
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, w, h);
+    for (let i = 0; i < stars.length; i++) {
+      let s = stars[i];
+      s.z -= 2;
+      if (s.z <= 0) { s.x = Math.random() * w; s.y = Math.random() * h; s.z = w; }
+      let k = 128.0 / s.z;
+      let px = s.x * k + w / 2;
+      let py = s.y * k + h / 2;
+      if (px >= 0 && px <= w && py >= 0 && py <= h) {
+        let size = (1 - s.z / w) * 3;
+        ctx.fillStyle = "rgba(255,30,30,1)";
         ctx.beginPath();
-        ctx.arc(px,py,size,0,Math.PI*2);
+        ctx.arc(px, py, size, 0, Math.PI * 2);
         ctx.fill();
       }
     }
@@ -293,4 +293,4 @@
 </script>
 
 </body>
-  </html>
+</html>
